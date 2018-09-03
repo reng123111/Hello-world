@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="js/163-angular.min.js"></script>
+<script src="js/index.js"></script>
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<title>Insert title here</title>
+</head>
+<body>
+	<div ng-app="vacApp" ng-controller="process2">
+		<h2>项目申请</h2>
+		<table border="0">
+			<tr>
+				<td>流程kay</td>
+				<td><input type="text" ng-model="defineKey" /></td>
+			</tr>
+			<tr>
+				<td>其他参数信息</td>
+				<td><textarea rows="5" cols="10" ng-model="params"></textarea></td>
+			</tr>
+			<tr>
+				<td>
+					<button ng-click="applyProject()">发起申请</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

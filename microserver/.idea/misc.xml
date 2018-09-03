@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka_server/pom.xml" />
+        <option value="$PROJECT_DIR$/server_web/pom.xml" />
+        <option value="$PROJECT_DIR$/service_ribbon/pom.xml" />
+        <option value="$PROJECT_DIR$/service_feign/pom.xml" />
+        <option value="$PROJECT_DIR$/service_zuul/pom.xml" />
+        <option value="$PROJECT_DIR$/config_server/pom.xml" />
+        <option value="$PROJECT_DIR$/config_client/pom.xml" />
+        <option value="$PROJECT_DIR$/config_eureka_server/pom.xml" />
+        <option value="$PROJECT_DIR$/server_zipkin/pom.xml" />
+        <option value="$PROJECT_DIR$/service_hi/pom.xml" />
+        <option value="$PROJECT_DIR$/service_miya/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/config_parent/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

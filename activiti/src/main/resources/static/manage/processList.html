@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>index</title>
+    <script src="js/163-angular.min.js"></script>
+    <script src="js/index.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+<body>
+	<div>
+		<form action="http://localhost/process/deploy" method="post" enctype="multipart/form-data" style="margin-top:1em;">
+            <input type="file" name="file" />
+            <input type="submit" value="上传流程文件" class="btn" />
+		</form>
+	</div>
+	<div ng-app="vacApp" ng-controller="process" ng-init="listProcessDefinition()">
+		 <table border="0" >
+            <tr>
+                <td>流程名称</td>
+                <td>流程key</td>
+                <td>版本</td>
+                <td>流程描述</td>
+                <td>流程图</td>
+            </tr>
+            <tr ng-repeat="process in processList">
+                <td>{{process.processName}}</td>
+                <td>{{process.proDefKey}}</td>
+                <td>{{process.version}}</td>
+                <td>{{process.processDesc}}</td>
+                 <td>
+                	<button type="button" onclick="javascrtpt:window.location.href='http://blog.sina.com.cn/mleavs'">查看</button>
+                </td>
+            </tr>
+        </table>
+	</div>
+</body>
+</html>
