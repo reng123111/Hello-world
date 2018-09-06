@@ -2,33 +2,59 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script src="js/163-angular.min.js"></script>
-    <script src="js/index.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script src="js/163-angular.min.js"></script>
+<!-- <script src="js/index.js"></script> -->
+<link rel="stylesheet" href="css/style.css" type="text/css" />
 <title>Insert title here</title>
 </head>
 <body>
 	<div ng-app="vacApp" ng-controller="process5" ng-init="myProcess()">
-		 <table border="0" >
-            <tr>
-                <td>请假时间</td>
-                <td>请假事由</td>
-                <td>流程名称</td>
-                <td>流程状态</td>
-                <td>流程启动时间</td>
-                <td>运行流程图</td>
-            </tr>
-            <tr ng-repeat="pro in myProcesses">
-                <td>{{pro.vars.days}}</td>
-                <td>{{pro.vars.reason}}</td>
-                <td>{{pro.processName}}</td>
-                <td>{{pro.status}}</td>
-                <td>{{pro.startTime}}</td>
-                <td>
-                	<button type="button" ng-click="viewImg(pro.proInsId)">查看</button>
-                </td>
-            </tr>
-        </table>
+		<table border="0">
+			<tr>
+				<td>流程名称</td>
+				<td>流程状态</td>
+				<td>发起人</td>
+				<td>流程启动时间</td>
+				<td>运行流程图</td>
+			</tr>
+			<tr ng-repeat="pro in myProcesses">
+				<td>{{pro.processName}}</td>
+				<td>{{pro.status}}</td>
+				<td>{{pro.startUserId}}</td>
+				<td>{{pro.startTime}}</td>
+				<td>
+					<button type="button" ng-click="viewImg(pro.proInsId)">查看</button>
+				</td>
+			</tr>
+		</table>
 	</div>
 </body>
+<script type="text/javascript">
+	var login_name = parent.document.getElementById('login_name').value;
+	var app = angular.module('vacApp', []);
+	app.controller('process5',function($scope, $http) {
+		$scope.myProcesses = [];
+		$scope.processInsId = "";
+		$scope.myProcess = function() {
+			$http.post("/process/queryMyProcesses?userId="+login_name)
+					.then(function(response) {
+						$scope.myProcesses = response.data.content.list;
+					})
+		}
+		$scope.viewImg = function(proInsId) {
+			/*$http.post(
+			    "/process/viewImage",
+			    {
+			    	"processInstanceId":proInsId
+			    }
+			).then(function (response) {
+			    $scope.myProcesses = response.data.content.list;
+			})*/
+			$scope.processInsId = proInsId;
+			window.location.href = 'http://localhost/process/viewImage?processInstanceId='
+					+ proInsId
+			// window.open('../pages/processImg.html', '_blank', 'height=400, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no') 
+		}
+	});
+</script>
 </html>

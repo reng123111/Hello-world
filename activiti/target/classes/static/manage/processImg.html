@@ -2,15 +2,34 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <script src="js/163-angular.min.js"></script>
-    <script src="js/index.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script src="js/163-angular.min.js"></script>
+<script src="js/index.js"></script>
+<link rel="stylesheet" href="css/style.css" type="text/css" />
 <title>Insert title here</title>
 </head>
 <body>
-	<div ng-app="vacApp" ng-controller="process5" >
-	{{processInsId}}
-		<img src="http://localhost/process/viewImage?processInstanceId="+{{processInsId}} > 
+	<div ng-app="vacApp" ng-controller="process5">
+		{{processInsId}} <img
+			src="http://localhost/process/viewImage?processInstanceId="+{{processInsId}} >
 	</div>
 </body>
+<script type="text/javascript">
+var login_name = parent.document.getElementById('login_name').value;
+var app = angular.module('vacApp', []);
+app.controller('process5', function ($scope, $http) {
+    $scope.myProcesses = [];
+    $scope.processInsId ="";
+    $scope.myProcess = function () {
+        $http.post(
+            "/process/queryMyProcesses?userId="+login_name
+        ).then(function (response) {
+            $scope.myProcesses = response.data.content.list;
+        })
+    }
+    $scope.viewImg = function (proInsId) {
+    	 $scope.processInsId=proInsId;
+    	 window.location.href='http://localhost/process/viewImage?processInstanceId='+proInsId
+    }
+});
+</script>
 </html>

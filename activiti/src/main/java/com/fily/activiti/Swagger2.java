@@ -1,4 +1,4 @@
-package com.fily.activiti.config;
+package com.fily.activiti;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +26,10 @@ public class Swagger2 {
                 .paths(PathSelectors.any())
                 .build();
     }
+    
+    /**
+     *  构建 api文档的详细信息函数,注意这里的注解引用的是哪个
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("流程引擎管理系统")

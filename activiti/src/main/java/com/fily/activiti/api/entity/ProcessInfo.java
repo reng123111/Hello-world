@@ -42,12 +42,19 @@ public class ProcessInfo implements Serializable{
 	private String processName;
 	private String processDesc;
 	private String status;
+	private String startUserId;
 	private String startTime;
 	private String endTime;
 	private long duration;
 	private String proStartUserId;
 	private String currentTaskName;
 	private Map<String,Object> vars;
+	public String getStartUserId() {
+		return startUserId;
+	}
+	public void setStartUserId(String startUserId) {
+		this.startUserId = startUserId;
+	}
 	public String getProDefId() {
 		return proDefId;
 	}

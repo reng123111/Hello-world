@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>模型管理</title>
+<meta charset="UTF-8">
+<title>模型管理</title>
 </head>
 <body>
-<div id="top">
-</div>
-<h2>模型列表</h2>
-<hr>
-<a href="javascript: AJAX.POST('/models/newModel')">绘制流程</a>
-<table border="1" id="model-list">
-    <tr>
-        <td>模型编号</td>
-        <td>模型名称</td>
-        <td>版本</td>
-        <td>创建时间</td>
-        <td>操作</td>
-    </tr>
-    <script id="models" type="text/html">
+	<div id="top"></div>
+	<h2>模型列表</h2>
+	<hr>
+	<a href="javascript: AJAX.POST('/models/newModel')">绘制流程</a>
+	<table border="1" id="model-list">
+		<tr>
+			<td>模型编号</td>
+			<td>模型名称</td>
+			<td>版本</td>
+			<td>创建时间</td>
+			<td>操作</td>
+		</tr>
+		<script id="models" type="text/html">
         <tr>
             <td>模型编号</td>
             <td>模型名称</td>
@@ -40,18 +39,18 @@
         </tr>
         {{/each}}
     </script>
-</table>
-<hr>
-<h2>部署列表</h2>
-<hr>
-<table border="1" id="deployment-list">
-    <tr>
-        <td>编号</td>
-        <td>名称</td>
-        <td>部署时间</td>
-        <td>操作</td>
-    </tr>
-    <script id="deployments" type="text/html">
+	</table>
+	<hr>
+	<h2>部署列表</h2>
+	<hr>
+	<table border="1" id="deployment-list">
+		<tr>
+			<td>编号</td>
+			<td>名称</td>
+			<td>部署时间</td>
+			<td>操作</td>
+		</tr>
+		<script id="deployments" type="text/html">
         <tr>
             <td>编号</td>
             <td>名称</td>
@@ -67,13 +66,13 @@
     </tr>
     {{/each}}
     </script>
-</table>
-<script src="/lib/js/jquery-1.10.2.min.js"></script>
-<script src="/lib/js/jquery.cookie.js"></script>
-<script src="/js/ajax-util.js"></script>
-<script src="/lib/js/template.js"></script>
+	</table>
+	<script src="/lib/js/jquery-1.10.2.min.js"></script>
+	<script src="/lib/js/jquery.cookie.js"></script>
+	<script src="/js/ajax-util.js"></script>
+	<script src="/lib/js/template.js"></script>
 
-<script>
+	<script>
 $(function() {
     AJAX.GET("/models", null
             , function (result) {

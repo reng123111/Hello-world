@@ -2,45 +2,88 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script src="js/163-angular.min.js"></script>
-    <script src="js/index.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script src="js/163-angular.min.js"></script>
+<!-- <script src="js/index.js"></script> -->
+<link rel="stylesheet" href="css/style.css" type="text/css" />
 <title>Insert title here</title>
 </head>
 <body>
 	<div ng-app="vacApp" ng-controller="process3" ng-init="getTodoTasks()">
-		 <table border="0" >
-            <tr>
-                <td>请假时间</td>
-                <td>请假事由</td>
-                <td>任务名称</td>
-                <td>任务开始时间</td>
-                <td>申请人</td>
-                <td>申请时间</td>
-                <td>审批</td>
-            </tr>
-            <tr ng-repeat="task in todoList">
-                <td>{{task.processVars.days}}</td>
-                 <td>{{task.processVars.reason}}</td>
-                <td>{{task.taskName}}</td>
-                <td>{{task.startTime}}</td>
-                <td>{{task.processStartUserName}}</td>
-                <td>{{task.processStartTime}}</td>
-                <td>
-	                <!-- <select ng-model="user" ng-options="item.value as item.name for item in options"> -->
-	               <!--  <select ng-model="user">
-					  <option value ="user2">用户2</option>
-					  <option value ="user3">用户3</option>
-					  <option value="user4">用户4</option>
-					  <option value="user5">用户5</option>
-					  <option value="user6">用户6</option>
-					  <option value="user7">用户7</option>
-					</select> -->
-                	 <!-- <button type="button" ng-click="passAudit(task.taskId,{{user}})">提交</button> -->
-                	 <button type="button" ng-click="passAudit(task.taskId)">提交</button>
-                </td>
-            </tr>
-        </table>
+		<table border="0">
+			<tr>
+				<td>流程名称</td>
+				<td>任务id</td>
+				<td>任务名称</td>
+				<td>任务开始时间</td>
+				<td>申请人</td>
+				<td>办理人</td>
+				<td>申请时间</td>
+				<td>审批</td>
+			</tr>
+			<tr ng-repeat="task in todoList">
+				<td>{{task.processName}}</td>
+				<td>{{task.taskId}}</td>
+				<td>{{task.taskName}}</td>
+				<td>{{task.startTime}}</td>
+				<td>{{task.processStartUserName}}</td>
+				<td>{{task.approveUserName}}</td>
+				<td>{{task.processStartTime}}</td>
+				<td>
+					<button type="button" ng-click="passAudit(task.taskId)">提交</button>
+				</td>
+			</tr>
+			<th><input type="hidden" ng-model="commit.taskId"
+				value="default" /> <input type="hidden"
+				ng-model="commit.loginUserId" value="default" />
+			<td>其他参数信息</td>
+			<td><textarea rows="5" cols="10" ng-model="commit.params"></textarea></td>
+			</th>
+		</table>
 	</div>
 </body>
+<script type="text/javascript">
+	var login_name = parent.document.getElementById('login_name').value;
+	var app = angular.module('vacApp', []);
+	app.controller('process3', function ($scope, $http) {
+		// 获取待处理任务
+		$scope.getTodoTasks = function () {
+	        $http.post(
+	            "/process/getTodoTasks?assignee="+login_name
+	        ).then(function (response) {
+	            $scope.todoList = response.data.content.list;
+	        })
+	    }
+	
+		// 提交任务
+	    $scope.passAudit = function(taskId) {
+			console.log($scope);
+			$scope.commit.taskId = taskId;
+			$scope.commit.loginUserId = login_name;
+	    	$http({
+				method : 'post',
+				url : '/process/commitTasks',
+				data : $scope.commit
+			}).then(function(response) {
+				console.log('post success!');
+				console.log(response.data);
+				if (response.data.success == true) {
+					alert('操作成功！');
+					$window.location.reload();
+				}
+			}, function(resp) {
+				console.log('post error!');
+				console.log(resp);
+			});
+	    };
+	}).config(function($httpProvider){
+		$httpProvider.defaults.transformRequest = function(obj) {
+			var str = [];
+			for ( var p in obj) {
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+			}
+			return str.join("&");
+		};
+		$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
+	});
+</script>
 </html>

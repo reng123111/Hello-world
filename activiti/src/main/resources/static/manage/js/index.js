@@ -6,22 +6,12 @@ app.controller('process2', function ($scope, $http, $window) {
     $scope.defineKey = "";
     $scope.params = "";
     $scope.applyProject = function () {
-    	$http({
-    		method: 'post',
-    		url: '/process/startProcess',
-    		data: {
+    	var data = {
     			loginUserName: login_name,
     			"processDefineKey": $scope.defineKey,
     			"params": $scope.params
     		}
-    	}).then(function(response) {
-    		console.log(response);
-    		if(response.data.success == true) {
-    			alert("操作成功!")
-    			$window.location.reload();
-    		}
-    	})
-    	
+//    	$.post('/process/startProcess', data);
     	
 //        $http.post(
 //            "/process/startProcess",
@@ -38,6 +28,15 @@ app.controller('process2', function ($scope, $http, $window) {
 //            }
 //        })
     }
+}).config(function ($httpProvider) {
+	$httpProvider.defaults.transformRequest = function (obj) {
+        var str = [];
+        for (var p in obj) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+        return str.join("&");
+    };
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 });
 app.controller('myVacCtrl', function ($scope, $http) {
 

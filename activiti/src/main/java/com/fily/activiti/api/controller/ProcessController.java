@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,7 +55,7 @@ public class ProcessController {
 	 * 
 	 */
 	@RequestMapping(value="/deploy",method = {RequestMethod.POST})
-	@ApiOperation(value="上传流程文件", notes="上传流程文件,格式为ZIP、BAR、BPMN20.XML、BPMN")
+//	@ApiOperation(value="上传流程文件", notes="上传流程文件,格式为ZIP、BAR、BPMN20.XML、BPMN")
 	public AjaxResponseObject deployProcessFile(@ApiParam(name = "file",required=true)@RequestParam(value = "file", required = true) MultipartFile file) {
 		boolean result = processService.deployProcessSubmit(file);
 		if (result) {
@@ -130,15 +129,19 @@ public class ProcessController {
 	 * @return
 	 * 
 	 */
+	
 	@RequestMapping(value="/getDoneTasks",method = {RequestMethod.POST})
 	@ApiOperation(value="获取已办任务", notes="获取已办任务")
-	public AjaxResponseObject getDoneTasks(
-			@ApiParam(name = "pageNum", value = "当前页数",required=false)@RequestParam(required = false) Integer pageNum,
-			@ApiParam(name = "pageSize", value = "每页数据量",required=false)@RequestParam(required = false) Integer pageSize,
-			@ApiParam(name = "assignee", value = "代理人",required=false)@RequestParam(required = false) String assignee,
-			@ApiParam(name = "candidateUser", value = "候选人",required=false)@RequestParam(required = false) String candidateUser,
-			@ApiParam(name = "proInsId", value = "流程实例ID",required=false)@RequestParam(required = false) String proInsId,
-			@ApiParam(name = "taskId", value = "任务ID",required=false)@RequestParam(required = false) String taskId) {
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "pageNum", value = "当前页数",required=false),
+		@ApiImplicitParam(name = "pageSize", value = "每页数据量",required=false),
+		@ApiImplicitParam(name = "assignee", value = "代理人",required=false),
+		@ApiImplicitParam(name = "candidateUser", value = "候选人",required=false),
+		@ApiImplicitParam(name = "proInsId", value = "流程实例ID",required=false),
+		@ApiImplicitParam(name = "taskId", value = "任务ID",required=false)
+	})
+	public AjaxResponseObject getDoneTasks(Integer pageNum, Integer pageSize, String assignee, String candidateUser
+			, String proInsId, String taskId) {
 		Pageable page = null;
 		if (pageNum != null && pageSize != null) {
 			page = new Pageable();
@@ -181,12 +184,13 @@ public class ProcessController {
 	 * @throws Exception
 	 * 
 	 */
-	@RequestMapping(value = "/viewImage",method = {RequestMethod.POST})
+	@RequestMapping(value = "/viewImage",method = {RequestMethod.GET})
 	@ApiOperation(value="获取流程图", notes="获取流程图")
-	public void viewImage(
-			@ApiParam(name = "processDefinitionId", value = "流程定义ID",required=false)@RequestParam(required = false)String processDefinitionId, 
-			@ApiParam(name = "processInstanceId", value = "流程实例ID",required=false)@RequestParam(required = false)String processInstanceId,
-			HttpServletResponse response)
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "processDefinitionId", value = "流程定义ID",required=false),
+		@ApiImplicitParam(name = "processInstanceId", value = "流程实例ID",required=false)
+	})
+	public void viewImage(String processDefinitionId, String processInstanceId, HttpServletResponse response)
 			throws Exception {
 		// 设置页面不缓存
 		response.setHeader("Pragma", "No-cache");
@@ -210,25 +214,14 @@ public class ProcessController {
 		return new AjaxResponseObject(true,FlowableConstants.QUERY_SUCCESS,imageStr);
 	}
 
-	/**
-	 * 
-	 * <p>
-	 * Title: listProcessDefinition
-	 * </p>
-	 * 
-	 * <p>
-	 * Description:查询流程定义
-	 * </p>
-	 * 
-	 * @param page
-	 * @return
-	 * 
-	 */
-	@ApiOperation(value="查询流程定义", notes="查询流程定义")
+	
 	@RequestMapping(value = "/listProcessDefinition",method = {RequestMethod.POST})
-	public AjaxResponseObject listProcessDefinition(
-			@ApiParam(name = "pageNum", value = "当前页数",required=false)@RequestParam(required = false) Integer pageNum, 
-			@ApiParam(name = "pageSize", value = "每页数据量",required=false)@RequestParam(required = false) Integer pageSize) {
+//	@ApiOperation(value="查询流程定义", notes="查询流程定义")
+//	@ApiImplicitParams({
+//		@ApiImplicitParam(name = "pageNum", value = "当前页数", dataType="int"),
+//		@ApiImplicitParam(name = "pageSize", value = "每页数据量", dataType="int")
+//	})
+	public AjaxResponseObject listProcessDefinition(Integer pageNum, Integer pageSize) {
 		Pageable page = null;
 		if (pageNum != null && pageSize != null) {
 			page = new Pageable();
@@ -256,15 +249,15 @@ public class ProcessController {
 	 * @return
 	 * 
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/startProcess",method = {RequestMethod.POST})
 	@ApiOperation(value="启动流程", notes="启动流程")
-//	@ApiImplicitParams( {
-//		@ApiImplicitParam(name="processDefineKey", value="流程key"),
-//		@ApiImplicitParam(name="loginUserName", value="登录用户", required=true),
-//		@ApiImplicitParam(name = "vars", value = "流程参数", required = true)
-//	})
-	
-	public AjaxResponseObject startProcess(@RequestParam(required=false) String processDefineKey, String loginUserName, String params) {
+	@ApiImplicitParams( {
+		@ApiImplicitParam(name="processDefineKey", value="流程key"),
+		@ApiImplicitParam(name="loginUserName", value="登录用户", required=true),
+		@ApiImplicitParam(name = "vars", value = "流程参数", required = true)
+	})
+	public AjaxResponseObject startProcess(String processDefineKey,String loginUserName, String params) {
 //		String processDefineKey = (String) vars.get("processDefineKey");
 		if (Tools.isNull(processDefineKey)) {
 			return new AjaxResponseObject(false, FlowableConstants.PROCKEY_IS_NULL);
@@ -304,19 +297,28 @@ public class ProcessController {
 	 * @return
 	 */
 	@RequestMapping(value = "/commitTasks",method = {RequestMethod.POST})
-	@ApiOperation(value="提交任务", notes="提交任务")
-	@ApiImplicitParam(name = "vars", value = "任务参数,至少包括任务id:taskId,登录用户ID：loginUserId", required = true, dataType = "Map")
-	public AjaxResponseObject commitTasks(@RequestBody Map<String, Object> vars) {
-		String taskId = (String) vars.get("taskId");
+//	@ApiOperation(value="提交任务", notes="提交任务")
+//	@ApiImplicitParam(name = "vars", value = "任务参数,至少包括任务id:taskId,登录用户ID：loginUserId", required = true, dataType = "Map")
+//	@ApiImplicitParams({
+//		@ApiImplicitParam(name="taskId", value="任务id", required=true),
+//		@ApiImplicitParam(name="loginUserId", value="登录用户ID", required=true),
+//		@ApiImplicitParam(name="params",value="其他相关参数信息")
+//	})
+	public AjaxResponseObject commitTasks(String taskId, String loginUserId, String params) {
+//		String taskId = (String) vars.get("taskId");
 		if (Tools.isNull(taskId)) {
 			return new AjaxResponseObject(false, FlowableConstants.TASK_ID_IS_NULL);
 		}
-		vars.remove("taskId");
-		String loginUserId = (String) vars.get("loginUserId");
+//		vars.remove("taskId");
+//		String loginUserId = (String) vars.get("loginUserId");
 		if(Tools.isNull(loginUserId)){
 			return new AjaxResponseObject(false, FlowableConstants.LOGIN_USER_IS_NULL);
 		}
-		vars.remove("loginUserId");
+//		vars.remove("loginUserId");
+		Map<String, Object> vars = null;
+		if(Tools.isNotNull(params)) {
+			vars = JSONObject.parseObject(params);
+		}
 		try {
 			processService.completeTask(taskId,loginUserId, vars);
 		} catch (Exception e) {

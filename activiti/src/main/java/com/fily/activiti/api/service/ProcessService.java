@@ -303,10 +303,13 @@ public class ProcessService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Page getCurrentWorkList(Pageable page, TaskQueryBo taskQueryBo) {
 		List<org.activiti.engine.task.Task> tasks = new ArrayList<org.activiti.engine.task.Task>();
+		// 封装查询对象
 		TaskQuery taskQuery = getTaskQuery(taskQueryBo);
+		// 设置排序
 		taskQuery.orderByTaskPriority().desc();
 		taskQuery.orderByTaskCreateTime().desc();
 		List<org.activiti.engine.task.Task> todoList = null;
+		// 获取数据
 		if(page != null){
 			int start = (page.getPageNow() - 1) * page.getPageSize();
 			int limit = page.getPageSize();
@@ -522,8 +525,10 @@ public class ProcessService {
 		TaskBo taskBo = null;
 		List<TaskBo> taskList = new ArrayList<TaskBo>();
 		List<HistoricTaskInstance> hisTaskInstanceList=null;
+		// 设置查询信息
 		HistoricTaskInstanceQuery historicTaskQuery = getHistoricTaskQuery(taskQueryBo);
 		historicTaskQuery.orderByHistoricTaskInstanceEndTime().desc();
+		// 获取数据
 		if(page != null){
 			int start = (page.getPageNow() - 1) * page.getPageSize();
 			int limit = page.getPageSize();
@@ -544,6 +549,7 @@ public class ProcessService {
 				} else {
 					taskBo.setStatus(ProcessStatus.RUNNING.getName());
 				}
+				taskBo.setApproveUserName(task.getAssignee());
 				taskBo.setStartTime(Tools.formatDateToStr(0, task.getStartTime()));
 				taskBo.setEndTime(Tools.formatDateToStr(0, task.getEndTime()));
 				taskBo.setDueTime(Tools.formatDateToStr(0, task.getDueDate()));
@@ -598,10 +604,12 @@ public class ProcessService {
 	public ProcessInfo startProcess(String processDefineKey,String businessKey,String loginUserName,Map<String, Object> processVars) {
 		log.info(String.format("启动流程开始,流程定义KEY:%s,流程业务ID:%s,登录用户ID:%s", processDefineKey,businessKey,loginUserName));
 		log.info("提交流程参数:"+Tools.mapToStr(processVars));
+		// 设置流程开启人员
 		identityService.setAuthenticatedUserId(loginUserName);
+		// 流程实例对象
 		ProcessInstance currentProcess=null;
+		// 开启流程，参数为 流程key,业务参数，业务id
 		if(Tools.isNull(businessKey))
-			// 启动流程
 			currentProcess=runtimeService.startProcessInstanceByKey(processDefineKey,processVars);
 		else
 			currentProcess=runtimeService.startProcessInstanceByKey(processDefineKey,businessKey,processVars);
@@ -806,7 +814,7 @@ public class ProcessService {
 		}
 	}
 	public Page findMyProcesses(String loginUserName,Pageable page) {
-		HistoricProcessInstanceQuery   processInstanceQuery =historyService.createHistoricProcessInstanceQuery().startedBy(loginUserName);
+		HistoricProcessInstanceQuery   processInstanceQuery =historyService.createHistoricProcessInstanceQuery(); //.startedBy(loginUserName);
 		List<HistoricProcessInstance> processes =null;
 		if(page==null){
 			processes = processInstanceQuery.list();
@@ -830,6 +838,7 @@ public class ProcessService {
 				}else
 					proInbfo.setStatus(ProcessStatus.RUNNING.getName());
 				proInbfo.setStartTime(Tools.formatDateToStr(0, pro.getStartTime()));
+				proInbfo.setStartUserId(pro.getStartUserId());
 				// 获取历史流程变量
 				List<HistoricVariableInstance> varInstanceList = historyService.createHistoricVariableInstanceQuery()
 						.processInstanceId(pro.getId()).list();

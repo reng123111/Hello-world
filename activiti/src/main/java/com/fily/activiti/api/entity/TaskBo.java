@@ -52,7 +52,7 @@ public class TaskBo {
 	//流程状态
 	private String status;
 	//流程版本
-	private  int version;
+	private  Integer version;
 	//事件ID
 	private String businessEventId;
 	//业务数据ID
@@ -117,10 +117,10 @@ public class TaskBo {
 		this.status = status;
 	}
 	
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
-	public void setVersion(int version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 	public String getBusinessEventId() {

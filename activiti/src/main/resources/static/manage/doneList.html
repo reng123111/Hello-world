@@ -2,33 +2,47 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script src="js/163-angular.min.js"></script>
-    <script src="js/index.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+<script src="js/163-angular.min.js"></script>
+<!-- <script src="js/index.js"></script> -->
+<link rel="stylesheet" href="css/style.css" type="text/css" />
 <title>Insert title here</title>
 </head>
 <body>
 	<div ng-app="vacApp" ng-controller="process4" ng-init="getDoneTasks()">
-		 <table border="0" >
-            <tr>
-                <td>请假时间</td>
-                <td>请假事由</td>
-                <td>任务名称</td>
-                <td>任务开始时间</td>
-                <td>任务结束时间</td>
-                <td>流程启动人</td>
-                <td>流程启动时间</td>
-            </tr>
-            <tr ng-repeat="task in doneList">
-                <td>{{task.processVars.days}}</td>
-                <td>{{task.processVars.reason}}</td>
-                <td>{{task.taskName}}</td>
-                <td>{{task.startTime}}</td>
-                <td>{{task.endTime}}</td>
-                <td>{{task.processStartUserName}}</td>
-                <td>{{task.processStartTime}}</td>
-            </tr>
-        </table>
+		<table border="0">
+			<tr>
+				<td>流程名称</td>
+				<td>任务名称</td>
+				<td>办理人</td>
+				<td>任务开始时间</td>
+				<td>任务结束时间</td>
+				<td>流程启动人</td>
+				<td>流程启动时间</td>
+			</tr>
+			<tr ng-repeat="task in doneList">
+				<td>{{task.processName}}</td>
+				<td>{{task.taskName}}</td>
+				<td>{{task.approveUserName}}</td>
+				<td>{{task.startTime}}</td>
+				<td>{{task.endTime}}</td>
+				<td>{{task.processStartUserName}}</td>
+				<td>{{task.processStartTime}}</td>
+			</tr>
+		</table>
 	</div>
 </body>
+<script type="text/javascript">
+	var login_name = parent.document.getElementById('login_name').value;
+	var app = angular.module('vacApp', []);
+	app.controller('process4', function ($scope, $http) {
+	    $scope.doneList = [];
+	    $scope.getDoneTasks = function () {
+	        $http.post(
+	            "/process/getDoneTasks?assignee="+login_name
+	        ).then(function (response) {
+	            $scope.doneList = response.data.content.list;
+	        })
+	    }
+	});
+</script>
 </html>

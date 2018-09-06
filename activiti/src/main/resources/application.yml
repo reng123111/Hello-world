@@ -17,7 +17,7 @@ security:
     
 spring:
   datasource:
-    url: $[sdp.flowable.db.url]
+    url: $[sdp.flowable.db.url]&amp;useSSL=false
     username: $[sdp.flowable.db.username] 
     password: $[sdp.flowable.db.password]
   thymeleaf:
