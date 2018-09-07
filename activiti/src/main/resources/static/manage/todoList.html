@@ -32,37 +32,46 @@
 					<button type="button" ng-click="passAudit(task.taskId)">提交</button>
 				</td>
 			</tr>
-			<th><input type="hidden" ng-model="commit.taskId"
-				value="default" /> <input type="hidden"
-				ng-model="commit.loginUserId" value="default" />
-			<td>其他参数信息</td>
-			<td><textarea rows="5" cols="10" ng-model="commit.params"></textarea></td>
+			<th>
+				<td>提交用户</td>
+				<td>
+					<input ng-model="loginUserId"/>
+				</td>
+				<td>其他参数信息</td>
+				<td><textarea rows="5" cols="10" ng-model="params"></textarea></td>
 			</th>
 		</table>
 	</div>
 </body>
 <script type="text/javascript">
-	var login_name = parent.document.getElementById('login_name').value;
 	var app = angular.module('vacApp', []);
-	app.controller('process3', function ($scope, $http) {
+	app.controller('process3', function ($scope, $http, $window) {
+		// 设置当前登录用户
+		$scope.login_name = parent.document.getElementById('login_name').value;
+		$scope.loginUserId = '';
+		$scope.params = '{}';
 		// 获取待处理任务
 		$scope.getTodoTasks = function () {
 	        $http.post(
-	            "/process/getTodoTasks?assignee="+login_name
+	            "/process/getTodoTasks?assignee="+$scope.login_name
 	        ).then(function (response) {
 	            $scope.todoList = response.data.content.list;
 	        })
 	    }
-	
+		
 		// 提交任务
-	    $scope.passAudit = function(taskId) {
+	    $scope.passAudit = function(id) {
 			console.log($scope);
-			$scope.commit.taskId = taskId;
-			$scope.commit.loginUserId = login_name;
+			$scope.taskId = id;
+			var data= {
+					'taskId': id,
+					'loginUserId': $scope.loginUserId,
+					'params': $scope.params
+			};
 	    	$http({
 				method : 'post',
 				url : '/process/commitTasks',
-				data : $scope.commit
+				data : data
 			}).then(function(response) {
 				console.log('post success!');
 				console.log(response.data);
