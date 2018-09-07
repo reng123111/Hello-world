@@ -17,7 +17,7 @@
 				<td>任务开始时间</td>
 				<td>申请人</td>
 				<td>办理人</td>
-				<td>申请时间</td>
+				<td>参数信息</td>
 				<td>审批</td>
 			</tr>
 			<tr ng-repeat="task in todoList">
@@ -27,19 +27,19 @@
 				<td>{{task.startTime}}</td>
 				<td>{{task.processStartUserName}}</td>
 				<td>{{task.approveUserName}}</td>
-				<td>{{task.processStartTime}}</td>
+				<td>{{task.processVars}}</td>
 				<td>
 					<button type="button" ng-click="passAudit(task.taskId)">提交</button>
 				</td>
 			</tr>
-			<th>
+			<tr>
 				<td>提交用户</td>
 				<td>
 					<input ng-model="loginUserId"/>
 				</td>
 				<td>其他参数信息</td>
 				<td><textarea rows="5" cols="10" ng-model="params"></textarea></td>
-			</th>
+			</tr>
 		</table>
 	</div>
 </body>
@@ -47,13 +47,12 @@
 	var app = angular.module('vacApp', []);
 	app.controller('process3', function ($scope, $http, $window) {
 		// 设置当前登录用户
-		$scope.login_name = parent.document.getElementById('login_name').value;
-		$scope.loginUserId = '';
+		$scope.loginUserId = parent.document.getElementById('login_name').value;
 		$scope.params = '{}';
 		// 获取待处理任务
 		$scope.getTodoTasks = function () {
 	        $http.post(
-	            "/process/getTodoTasks?assignee="+$scope.login_name
+	            "/process/getTodoTasks?assignee="+$scope.loginUserId
 	        ).then(function (response) {
 	            $scope.todoList = response.data.content.list;
 	        })

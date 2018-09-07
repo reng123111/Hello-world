@@ -814,7 +814,10 @@ public class ProcessService {
 		}
 	}
 	public Page findMyProcesses(String loginUserName,Pageable page) {
-		HistoricProcessInstanceQuery   processInstanceQuery =historyService.createHistoricProcessInstanceQuery(); //.startedBy(loginUserName);
+		HistoricProcessInstanceQuery   processInstanceQuery =historyService.createHistoricProcessInstanceQuery(); 
+		if(Tools.isNotNull(loginUserName)) {
+			processInstanceQuery.startedBy(loginUserName);
+		}
 		List<HistoricProcessInstance> processes =null;
 		if(page==null){
 			processes = processInstanceQuery.list();
