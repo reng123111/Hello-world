@@ -60,7 +60,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dy.springcloud.framework.utils.StringUtil;
 import com.fily.activiti.api.entity.Page;
 import com.fily.activiti.api.entity.Pageable;
 import com.fily.activiti.api.entity.ProcessInfo;
@@ -342,11 +341,11 @@ public class ProcessService {
 	private TaskQuery getTaskQuery(TaskQueryBo taskQueryBo) {
 		TaskQuery taskQuery = taskService.createTaskQuery();
 		if (taskQueryBo != null) {
-			if(StringUtil.isNotBlank(taskQueryBo.getProInsId())){
+			if(StringUtils.isNotBlank(taskQueryBo.getProInsId())){
 				taskQuery.processInstanceId(taskQueryBo.getProInsId());
 			}
 			String candidateUser = taskQueryBo.getCandidateUser();
-			if (StringUtil.isNotBlank(candidateUser))
+			if (StringUtils.isNotBlank(candidateUser))
 				taskQuery = taskQuery.taskCandidateUser(candidateUser);
 			Map<String, Object> variableMap = taskQueryBo.getVariableMap();
 			if (variableMap != null && variableMap.size() > 0) {
@@ -356,13 +355,13 @@ public class ProcessService {
 				}
 			}
 			String userTaskId = taskQueryBo.getUserTaskId();
-			if (StringUtil.isNotBlank(userTaskId))
+			if (StringUtils.isNotBlank(userTaskId))
 				taskQuery = taskQuery.taskDefinitionKey(userTaskId);
 			String taskId = taskQueryBo.getTaskId();
-			if (StringUtil.isNotBlank(taskId))
+			if (StringUtils.isNotBlank(taskId))
 				taskQuery = taskQuery.taskId(taskId);
 			String assignee = taskQueryBo.getAssignee();
-			if (StringUtil.isNotBlank(assignee))
+			if (StringUtils.isNotBlank(assignee))
 				taskQuery = taskQuery.taskAssignee(assignee);
 		}
 		return taskQuery;
@@ -372,15 +371,15 @@ public class ProcessService {
 		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 		if (taskQueryBo != null) {
 			String candidateUser = taskQueryBo.getCandidateUser();
-			if (StringUtil.isNotBlank(candidateUser))
+			if (StringUtils.isNotBlank(candidateUser))
 				query = query.taskCandidateUser(candidateUser);
 			String assignee = taskQueryBo.getAssignee();
-			if (StringUtil.isNotBlank(assignee))
+			if (StringUtils.isNotBlank(assignee))
 				query = query.taskAssignee(assignee);
 			String taskId = taskQueryBo.getTaskId();
-			if (StringUtil.isNotBlank(taskId))
+			if (StringUtils.isNotBlank(taskId))
 				query = query.taskId(taskId);
-			if(StringUtil.isNotBlank(taskQueryBo.getProInsId())){
+			if(StringUtils.isNotBlank(taskQueryBo.getProInsId())){
 				query.processInstanceId(taskQueryBo.getProInsId());
 			}
 			query.finished();

@@ -5,21 +5,11 @@ security:
   basic:
     enabled: false
   
-#spring: 
-#  datasource: 
-#    url: $[sdp.flowable.db.url]
-#    username: $[sdp.flowable.db.username] 
-#    password: $[sdp.flowable.db.password]
-#    driver-class-name: com.mysql.jdbc.Driver
-#  thymeleaf:
-#    mode: LEGACYHTML5
-#    cache: false
-    
 spring:
   datasource:
-    url: $[sdp.flowable.db.url]&amp;useSSL=false
-    username: $[sdp.flowable.db.username] 
-    password: $[sdp.flowable.db.password]
+    url: jdbc:mysql://localhost:3306/activiti
+    username: root
+    password: root
   thymeleaf:
     mode: LEGACYHTML5
     cache: false
